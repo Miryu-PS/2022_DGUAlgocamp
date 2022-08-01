@@ -1,38 +1,55 @@
-#include<bits/stdc++.h>
-using namespace std;
-int arr[1000005], N;
-int lower_bound(int x) // x 이상의 수가 처음 등장하는 위치
-{
-	int L = 0, R = N;
-	while(L<R)
-	{
-		int mid = (L+R)/2;
-		if(arr[mid] < x) L=mid+1;
-		else if(arr[mid] >= x) R=mid;
-	}
-	return L;
-}
-int upper_bound(int x) // x 초과의 수가 처음 등장하는 위치
-{
-	int L = 0, R = N;
-	while(L<R)
-	{
-		int mid = (L+R)/2;
-		if(arr[mid] <= x) L=mid+1;
-		else if(arr[mid] > x) R=mid;
-	}
-	return L;
-}
-int main()
-{
-	ios_base::sync_with_stdio(false); cin.tie(0);
-	int M; cin>>N>>M;
-	for(int i=0; i<N; i++) cin>>arr[i]; sort(arr,arr+N);
-	arr[N] = INT_MAX;
+import java.io.*;
+import java.util.*;
 
-	while(M--)
-	{
-		int a,b; cin>>a>>b;
-		cout<<upper_bound(b) - lower_bound(a)<<'\n';
-	}
+public class main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+
+        int N = Integer.parseInt(st.nextToken());
+        int Q = Integer.parseInt(st.nextToken());
+        ArrayList<Integer> arr = new ArrayList<Integer>();
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            arr.add(Integer.parseInt(st.nextToken()));
+        }
+
+        arr.add(Integer.MAX_VALUE); // 모든 수가 구하려는 수보다 클 때, 자동으로 N을 return하기 위해 arr의 n번 위치에 max_value를 add
+
+        Collections.sort(arr);
+        for (int i = 0; i<Q; i++) {
+            st = new StringTokenizer(br.readLine());
+            int A = Integer.parseInt(st.nextToken());
+            int B = Integer.parseInt(st.nextToken());
+
+            // A 이상의 수가 처음 나타나는 위치 찾기
+            int l=0, r=N;
+            while(l<r) {
+                int mid = (l+r)/2;
+                if(arr.get(mid) < A) {
+                    l = mid+1;
+                }
+                else {
+                    r = mid;
+                }
+            }
+            int A_lb = l;
+
+            // B 초과의 수가 처음 나타나는 위치 찾기
+            l=0; r=N;
+            while(l<r) {
+                int mid = (l+r)/2;
+                if(arr.get(mid) <= B) {
+                    l = mid+1;
+                }
+                else {
+                    r = mid;
+                }
+            }
+            int B_ub = l;
+            sb.append((B_ub - A_lb) + "\n");
+        }
+        System.out.println(sb.toString());
+    }
 }
